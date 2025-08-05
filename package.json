@@ -1,0 +1,12 @@
+{
+  "name": "problem-vault",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A curated collection of frequently asked coding interview questions with solutions.",
+  "main": "__test.js",
+  "scripts": {
+    "test": "for file in problems/*.js; do if [ -f \"$file\" ]; then echo \"\"; echo \"Running $file\"; node \"$file\"; fi; done; echo \"\";"
+  },
+  "author": "",
+  "license": "ISC"
+}

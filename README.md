@@ -11,7 +11,11 @@ Each file contains a single problem with its solution:
 
 ## Usage
 
-Browse individual files to study specific problems. Each file includes:
+Run `npm run test`
+
+Browse individual files to study specific problems. 
+
+Each file includes:
 - Problem description
 - Solution approach
 - Time and space complexity analysis
