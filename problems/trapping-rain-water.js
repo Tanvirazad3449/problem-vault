@@ -16,50 +16,68 @@
 // ______███████......█████████████......████████████████████████████████████████
 //   0      1     0      2     1      0     1     3      2      1      2     1                                                                                
 
-// Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+// Input: h = [0,1,0,2,1,0,1,3,2,1,2,1]
 // Output: 6
 
-// time: O(n^2)
-// function f(heights){
-//     let totalWater = 0
-//     for(let i = 0; i < heights.length; i++){
-//         if(i === 0 || i === heights.length - 1) continue
-        
-//         const maxLeftBarHeight = Math.max(...heights.slice(0,i))
-//         const maxRightBarHeight = Math.max(...heights.slice(i+1, heights.length))
-//         const water = Math.min(maxLeftBarHeight, maxRightBarHeight) - heights[i]
-//         console.log({water})
-//         if(water > 0) totalWater += water
+// __________________________ APPROACH 1 __________________________
+
+// find max of both sides every iteration
+// time: O(n^2) space: O(n)
+// function f(h) {
+//     let total = 0
+//     for (let i = 1; i < h.length - 1; i++) {
+//         let maxL = Math.max(...h.slice(0, i)), maxR = Math.max(...h.slice(i + 1, h.length))
+//         const water = Math.min(maxL, maxR) - h[i]
+//         if (water > 0) total += water
 //     }
-//     return totalWater
+//     return total
 // }
 
+
+// __________________________ APPROACH 2 __________________________
+// memoize all leftMaxes and rightMaxes
 // time: O(n) space: O(n)
-// function f(heights){
-//     let totalWater = 0
-//     let leftMaxHeights = Array(heights.length).fill(0)
-//     let rightMaxHeights = Array(heights.length).fill(0)
+// function f(h) {
+//     let maxL = new Array(h.length).fill(0), maxR = [...maxL]
+//     let total = 0
 
-//     for (let i = 1; i < heights.length; i++) {
-//         leftMaxHeights[i] = Math.max(leftMaxHeights[i-1], heights[i-1])
+//     for (let i = 0; i < h.length; i++) {
+//         maxL[i] = Math.max(maxL[i - 1] || 0, h[i - 1] || 0)
 //     }
 
-//     for (let i = heights.length - 2; i > -1; i--) {
-//         rightMaxHeights[i] = Math.max(rightMaxHeights[i+1], heights[i+1])
+//     for (let i = h.length - 1; i > -1; i--) {
+//         maxR[i] = Math.max(maxR[i+1] || 0, h[i+1] || 0)
 //     }
 
-//     for (let i = 0; i < heights.length; i++) {
-//         const h = heights[i];
-//         const water = Math.min(leftMaxHeights[i], rightMaxHeights[i]) - h
-//         if(water > 0) totalWater+= water
-        
+//     for(let i = 0; i < h.length; i++){
+//         const water = Math.min(maxL[i], maxR[i]) - h[i]
+//         if(water > 0) total += water
 //     }
 
-//     return totalWater
+//     return total
+
 // }
 
-// TODO: try with 2 pointer
 
-console.log(f([0,1,0,2,0])) // 1
+// __________________________ APPROACH 3 __________________________
+// two pointer technique, look for the boundary for the smaller block
+// time: O(n) space: O(1) 
+function f(h){
+    let l = 0, r = h.length - 1, maxL = 0, maxR = 0, total = 0
+    while(l < r){
+        if(h[l] < h[r]){
+            maxL = Math.max(maxL, h[l-1] || 0)
+            const water = maxL - h[l]
+            if(water > 0) total += water
+            l++
+        }else{
+            maxR = Math.max(maxR, h[r+1] || 0)
+            const water = maxR - h[r]
+            if(water > 0) total += water
+            r--
+        }
+    }
+    return total
+}
 
-console.log(f([0,1,0,2,1,0,1,3,2,1,2,1])) // 6
+console.log(f([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]))
