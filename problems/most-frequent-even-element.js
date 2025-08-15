@@ -1,4 +1,4 @@
-import test from "../__test.mjs"
+import test from "../test.mjs"
 
 // https://leetcode.com/problems/most-frequent-even-element/description/
 // Given an integer array nums, return the most frequent even element.

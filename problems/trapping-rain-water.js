@@ -4,6 +4,8 @@
 // where the width of each bar is 1, 
 // compute how much water it can trap after raining.
 
+import test from "../test.mjs"
+
 //
 //                                             ███████                     
 //                                             ███████                         
@@ -80,4 +82,9 @@ function f(h){
     return total
 }
 
-console.log(f([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]))
+
+test([
+    {input: [[0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]], expected: 6},
+    {input: [[0, 3, 1, 2, 4, 1, 2]], expected: 4},
+], f)
+

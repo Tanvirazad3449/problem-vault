@@ -1,4 +1,4 @@
-import test from "../__test.mjs"
+import test from "../test.mjs"
 
 // https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
 // Given a string s, find the length of the longest substring without duplicate characters.
