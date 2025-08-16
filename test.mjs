@@ -9,12 +9,16 @@
 
 export default function test(testCases, func) {
     testCases.forEach((test, index) => {
+        console.time(index + 1)
         const result = func(...test.input);
+        
         const passed = JSON.stringify(result) === JSON.stringify(test.expected);
         console.log(`Test ${index + 1}: ${passed ? '✅ PASS' : '❌ FAIL'}`);
         if (!passed) {
             console.log(`  Expected: ${JSON.stringify(test.expected)}`);
             console.log(`  Got: ${JSON.stringify(result)}`);
         }
+        console.timeEnd(index + 1)
+        console.log('\n')
     });
 }
