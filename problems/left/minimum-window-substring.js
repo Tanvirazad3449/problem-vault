@@ -1,4 +1,4 @@
-import test from "../test.mjs"
+import test from "../../test.mjs"
 
 // https://leetcode.com/problems/minimum-window-substring/description/
 // Given two strings s and t of lengths m and n respectively, 
