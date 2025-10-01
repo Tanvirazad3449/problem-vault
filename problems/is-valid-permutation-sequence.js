@@ -29,5 +29,3 @@ test([
     {input: [[1, 2, 4]], expected: false},
     {input: [[2,3]], expected: false}
 ], f)
-const s = new Set([1,2,3])
-console.log(s.size)

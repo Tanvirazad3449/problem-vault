@@ -1,48 +1,65 @@
 /**
  * Runs a series of test cases against a given function and logs the results.
  *
- * @param {Array<{input: Array<any>, expected: any}>} testCases - An array of test objects, e.g: [{ input: [1, 9], expected: 11 }]
+ * @param {Array<{input: Array<any>, expected: any}>} testCases - An array of test objects, e.g: [{ input: [1, 10], expected: 11 }] (1 + 10 = 11)
  * Each object must have an `input` array and an `expected` value.
  * @param {Function} func - The function to be tested. It will be called with the `input` array from each test case.
  * @returns {void}
  */
-export default function test(testCases, func) {
-    let report = "", passCount = 0
 
-    testCases.forEach((test, index) => {
+// export default function test(testCases, func) {
+//     testCases.forEach((test, index) => {
+//         console.time(index + 1)
+//         const result = func(...test.input);
+
+//         const passed = JSON.stringify(result) === JSON.stringify(test.expected);
+//         console.log(`Test ${index + 1}: ${passed ? '✅ PASS' : '❌ FAIL'}`);
+//         if (!passed) {
+//             console.log(`  Expected: ${JSON.stringify(test.expected)}`);
+//             console.log(`  Got: ${JSON.stringify(result)}`);
+//         }
+//         console.timeEnd(index + 1)
+//         console.log('\n')
+//     });
+// }
+
+
+export default function test(testCases, func) {
+    let passCount = 0;
+    let failCount = 0;
+    let failRecord = []
+
+    testCases.forEach((test) => {
         const result = func(...test.input);
 
-        let passed = false, expectedStr = ''
-
-        if (Array.isArray(test.expected) && test.expected.length > 0) {
-            // Case 1: expected is a list of possible correct values
-            if (!Array.isArray(test.expected[0])) {
-                passed = test.expected.some(exp => JSON.stringify(result) === JSON.stringify(exp));
-                expectedStr = test.expected.join(' or ')
-            }
-            // Case 2: expected is a single correct array
-            else {
-                passed = JSON.stringify(result) === JSON.stringify(test.expected[0]);
-                expectedStr = JSON.stringify(test.expected[0])
-            }
-        } else {
-            // Single value case
-            passed = JSON.stringify(result) === JSON.stringify(test.expected);
-            expectedStr = JSON.stringify(test.expected)
-
-
-        }
-
-        report += `${passed ? '✅ Passed with' : '❌ Failed with'}`
-        report += ` input: ${JSON.stringify(...test.input)}`
-        report += ` ${!passed ? `(expected: ${expectedStr},` : ''}`
-        report += ` ${!passed ? `got: ${JSON.stringify(result)})` : ''} \n \n`
+        const passed = JSON.stringify(result) === JSON.stringify(test.expected);
 
         if (passed) {
-            passCount++
+            passCount++;
+        } else {
+            failCount++;
+            failRecord.push({
+                input: test.input,
+                expected: test.expected,
+                got: result
+            })
         }
+
     });
 
-    report += `👉 Passed ${passCount} out of ${testCases.length}`
-    console.log(report);
+    console.table({
+        'Total Tests': testCases.length,
+        ...(passCount > 0 && { '✅ Passed': passCount }),
+        ...(failCount > 0 && { '❌ Failed': failCount })
+    });
+
+    if (failRecord.length > 0) {
+        console.log('\nFailed for the following cases:')
+        console.table(failRecord.map(record => ({
+            input: JSON.stringify(record.input),
+            expected: JSON.stringify(record.expected),
+            got: JSON.stringify(record.got)
+        })));
+    }
+
 }
